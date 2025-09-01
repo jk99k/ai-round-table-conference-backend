@@ -3,7 +3,7 @@ FastAPIアプリのエントリーポイント。CORS設定とルーター登録
 """
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from app.api.endpoints import health, debate
+from api.endpoints import health, debate
 
 app = FastAPI(title="Brainstorming Colosseum API")
 
