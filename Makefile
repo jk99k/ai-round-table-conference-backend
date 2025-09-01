@@ -6,13 +6,13 @@ down:
 	docker-compose down
 
 lint:
-	docker-compose run --rm api ruff check app
+	docker-compose exec api ruff check --fix
 
 format:
-	docker-compose run --rm api ruff format app
+	docker-compose exec api ruff format
 
 migrate-generate:
-	docker-compose run --rm api alembic revision --autogenerate -m "auto migration"
+	docker-compose exec api alembic revision --autogenerate -m "auto migration"
 
 migrate-upgrade:
-	docker-compose run --rm api alembic upgrade head
+	docker-compose exec api alembic upgrade head

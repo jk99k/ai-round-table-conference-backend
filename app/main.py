@@ -1,6 +1,7 @@
 """
 FastAPIアプリのエントリーポイント。CORS設定とルーター登録を行う。
 """
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from api.endpoints import health, debate
