@@ -1,5 +1,4 @@
 [tool.ruff]
 line-length = 88
-target-version = "py311"
-select = ["E", "F", "I", "B", "UP", "C4", "TID", "D", "N", "Q", "RUF"]
-exclude = ["alembic/versions"]
+target-version = "py39"
+select = ["E", "F", "W"]

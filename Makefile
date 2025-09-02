@@ -1,18 +1,20 @@
-# 開発用コマンド集
 up:
-	docker-compose up -d
+	docker compose up -d
 
 down:
-	docker-compose down
+	docker compose down
 
 lint:
-	docker-compose exec api ruff check --fix
+	ruff check .
 
 format:
-	docker-compose exec api ruff format
+	ruff format .
 
-migrate-generate:
-	docker-compose exec api alembic revision --autogenerate -m "auto migration"
+makemigrations:
+	docker compose exec api python manage.py makemigrations
 
-migrate-upgrade:
-	docker-compose exec api alembic upgrade head
+migrate:
+	docker compose exec api python manage.py migrate
+
+createsuperuser:
+	docker compose exec api python manage.py createsuperuser
