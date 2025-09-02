@@ -4,10 +4,8 @@ Brainstorming Colosseum DBモデル定義（SQLAlchemy 2.0同期スタイル）
 """
 
 from sqlalchemy import BIGINT, INTEGER, TEXT, VARCHAR, TIMESTAMP, ForeignKey, func
-from sqlalchemy.orm import Mapped, mapped_column, relationship, declarative_base
-
-# 全モデルのベースクラス
-Base = declarative_base()
+from sqlalchemy.orm import Mapped, mapped_column, relationship
+from app.db.base import Base
 
 
 class User(Base):

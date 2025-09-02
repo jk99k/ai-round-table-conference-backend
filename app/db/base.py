@@ -7,4 +7,4 @@ from sqlalchemy.orm import declarative_base
 Base = declarative_base()
 
 # Alembicの自動検出用: models配下の全モデルをimport
-from models import *
+from app.models import *

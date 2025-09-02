@@ -4,7 +4,7 @@
 
 from sqlalchemy import BIGINT, TIMESTAMP, ForeignKey, func
 from sqlalchemy.orm import Mapped, mapped_column
-from db.base import Base
+from app.db.base import Base
 
 
 class DebateParticipant(Base):
