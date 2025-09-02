@@ -37,6 +37,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework_simplejwt',
+    'ninja_jwt',
+    'users',
 ]
 
 MIDDLEWARE = [
@@ -125,3 +128,10 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# Django Ninja JWT の基本設定
+NINJA_JWT = {
+    "SECRET_KEY": "your-secret-key",  # 必要に応じて環境変数等で管理
+    "ACCESS_TOKEN_LIFETIME": 60,      # 分単位（例: 60分）
+    "REFRESH_TOKEN_LIFETIME": 1440,   # 分単位（例: 1日）
+}

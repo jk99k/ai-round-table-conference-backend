@@ -17,8 +17,13 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from ninja import NinjaAPI
+from users.api import router as users_router
 
 api = NinjaAPI()
+
+# # JWTトークン発行・リフレッシュの公式推奨エンドポイント
+# ユーザー関連API
+api.add_router("/users", users_router)
 
 @api.get("/hello")
 def hello(request):
