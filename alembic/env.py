@@ -8,7 +8,7 @@ from sqlalchemy import engine_from_config, pool
 from alembic import context
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
-from db.base import Base
+from app.db.base import Base
 # from app.models.debate import Debate
 # from app.models.message import Message
 from app.core.config import settings

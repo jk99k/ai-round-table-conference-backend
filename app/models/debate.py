@@ -4,7 +4,7 @@
 
 from sqlalchemy import BIGINT, VARCHAR, TEXT, TIMESTAMP, ForeignKey, func
 from sqlalchemy.orm import Mapped, mapped_column, relationship
-from .base import Base
+from db.base import Base
 
 from typing import TYPE_CHECKING
 

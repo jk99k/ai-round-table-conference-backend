@@ -5,7 +5,7 @@
 from typing import TYPE_CHECKING
 from sqlalchemy import BIGINT, INTEGER, TEXT, TIMESTAMP, ForeignKey, func
 from sqlalchemy.orm import Mapped, mapped_column, relationship
-from .base import Base
+from db.base import Base
 
 if TYPE_CHECKING:
     from .debate import Debate

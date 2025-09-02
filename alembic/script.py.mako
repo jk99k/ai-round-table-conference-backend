@@ -1,10 +1,7 @@
-<%text>
-Alembic migration script template.
-</%text>
 """${message}
 
 Revision ID: ${up_revision}
-Revises: ${down_revision | none}
+Revises: ${down_revision}
 Create Date: ${create_date}
 
 """
