@@ -17,6 +17,9 @@ class TokenOut(BaseModel):
     access: str
     refresh: str
 
+class RefreshIn(BaseModel):
+    refresh: str
+
 @router.post("/register", response={201: UserOut, 400: dict})
 def register(request, data: UserRegisterIn):
     try:
@@ -41,3 +44,12 @@ def login(request, data: LoginIn):
         refresh = RefreshToken.for_user(user)
         return 200, TokenOut(access=str(refresh.access_token), refresh=str(refresh))
     return 401, {"error": "Invalid credentials"}
+
+@router.post("/refresh", response={200: TokenOut, 401: dict})
+def refresh_token(request, data: RefreshIn):
+    try:
+        refresh = RefreshToken(data.refresh)
+        access_token = str(refresh.access_token)
+        return 200, TokenOut(access=access_token, refresh=str(refresh))
+    except Exception:
+        return 401, {"error": "Invalid refresh token"}
