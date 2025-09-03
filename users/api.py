@@ -7,7 +7,7 @@ from ninja_jwt.authentication import JWTAuth
 from .schemas import UserRegisterIn, UserOut
 from pydantic import BaseModel
 
-router = Router()
+router = Router(tags=["users"])
 
 class LoginIn(BaseModel):
     username: str
@@ -20,7 +20,7 @@ class TokenOut(BaseModel):
 class RefreshIn(BaseModel):
     refresh: str
 
-@router.post("/register", response={201: UserOut, 400: dict})
+@router.post("", response={201: UserOut, 400: dict})
 def register(request, data: UserRegisterIn):
     try:
         user = User.objects.create_user(

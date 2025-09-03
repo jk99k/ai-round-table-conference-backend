@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
+from datetime import timedelta
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -40,6 +41,7 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt',
     'ninja_jwt',
     'users',
+    'agents',
 ]
 
 MIDDLEWARE = [
@@ -132,6 +134,6 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # Django Ninja JWT の基本設定
 NINJA_JWT = {
     "SECRET_KEY": "your-secret-key",  # 必要に応じて環境変数等で管理
-    "ACCESS_TOKEN_LIFETIME": 60,      # 分単位（例: 60分）
-    "REFRESH_TOKEN_LIFETIME": 1440,   # 分単位（例: 1日）
+    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=60),      # 分単位（例: 60分）
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=1),   # 分単位（例: 1日）
 }
