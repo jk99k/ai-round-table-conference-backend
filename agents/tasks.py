@@ -11,7 +11,6 @@ def run_agent_creation_task(agent_id: int):
         agent.save()
         logger.info(f"[AgentTask] Generating persona for: {agent.name}")
         persona = generate_persona(agent.name)
-        logger.info(f"[AgentTask] Persona result: {persona}")
         avatar_url = search_and_download_image(agent.name, agent.id)
         logger.info(f"[AgentTask] Avatar URL result: {avatar_url}")
         agent.persona_prompt = persona

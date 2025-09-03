@@ -1,8 +1,10 @@
 from google import genai
 from mako.template import Template
-import wikipedia
+from ddgs import DDGS
 import requests
 import os
+import logging
+import mimetypes
 
 PERSONA_TEMPLATE = """
 【議論の仕方】
@@ -43,17 +45,35 @@ def generate_persona(name: str) -> str:
 
 def search_and_download_image(query: str, agent_id: int) -> str | None:
     try:
-        page = wikipedia.page(query)
-        if page.images:
-            image_url = page.images[0]
-            resp = requests.get(image_url)
-            if resp.status_code == 200:
-                os.makedirs("static/images", exist_ok=True)
-                ext = image_url.split('.')[-1]
-                local_path = f"static/images/agent_{agent_id}.{ext}"
-                with open(local_path, "wb") as f:
-                    f.write(resp.content)
-                return local_path
-    except Exception:
-        pass
-    return None
+        results = DDGS().images(
+            query=query,
+            region="jp-jp",
+            safesearch="moderate",
+            max_results=3,
+        )
+        for result in results:
+            image_url = result.get('image')
+            if image_url:
+                try:
+                    resp = requests.get(image_url)
+                    if resp.status_code == 200:
+                        os.makedirs("static/images", exist_ok=True)
+                        # クエリパラメータを除去して拡張子取得
+                        url_path = image_url.split('?')[0]
+                        ext = os.path.splitext(url_path)[-1].lstrip('.')
+                        # 拡張子が不明な場合はmimetypesで判定
+                        if not ext:
+                            ext = mimetypes.guess_extension(resp.headers.get('content-type', ''), strict=False) or 'jpg'
+                            ext = ext.lstrip('.')
+                        local_path = f"static/images/agent_{agent_id}.{ext}"
+                        with open(local_path, "wb") as f:
+                            f.write(resp.content)
+                        return local_path
+                except Exception as e:
+                    logger = logging.getLogger('agents.services')
+                    logger.warning(f"[AgentService] Failed to download image {image_url} for agent_id={agent_id}: {e}")
+        return "static/images/default_avatar.png"
+    except Exception as e:
+        logger = logging.getLogger('agents.services')
+        logger.exception(f"[AgentService] Error searching images for agent_id={agent_id}: {e}")
+        return "static/images/default_avatar.png"
