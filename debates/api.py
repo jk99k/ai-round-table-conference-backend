@@ -25,7 +25,7 @@ def create_debate(request, data: DebateCreateSchema):
         return 400, {"error": str(e)}
 
 
-@router.post("/{debate_id}/end/", response={200: DebateOutSchema, 404: dict})
+@router.post("/{debate_id}/end", response={200: DebateOutSchema, 404: dict})
 def end_debate(request, debate_id: int):
     debate = Debate.objects.filter(id=debate_id).first()
     if not debate:
