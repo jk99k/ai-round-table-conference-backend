@@ -22,6 +22,8 @@ class MessageOutSchema(ModelSchema):
 
 class DebateOutSchema(ModelSchema):
     messages: List[MessageOutSchema] = []
+    next_agent_id: Optional[int] = None
+    next_agent_name: Optional[str] = None
     class Config:
         model = Debate
         model_fields = "__all__"

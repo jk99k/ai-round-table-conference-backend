@@ -38,7 +38,26 @@ def end_debate(request, debate_id: int):
 @router.get("", response=list[DebateOutSchema])
 def list_debates(request):
     debates = Debate.objects.all().order_by('-created_at')
-    return [DebateOutSchema.from_orm(obj) for obj in debates]
+    debate_out_list = []
+    for debate in debates:
+        agents = list(debate.agents.all().order_by('id'))
+        messages = list(debate.messages.order_by('turn'))
+        if agents:
+            if messages:
+                next_idx = (messages[-1].turn) % len(agents)
+            else:
+                next_idx = 0
+            next_agent = agents[next_idx]
+            next_agent_id = next_agent.id
+            next_agent_name = next_agent.name
+        else:
+            next_agent_id = None
+            next_agent_name = None
+        debate_out = DebateOutSchema.from_orm(debate)
+        debate_out.next_agent_id = next_agent_id
+        debate_out.next_agent_name = next_agent_name
+        debate_out_list.append(debate_out)
+    return debate_out_list
 
 
 @router.get("/{debate_id}", response={200: DebateOutSchema, 404: dict})
@@ -46,6 +65,20 @@ def get_debate(request, debate_id: int):
     debate = Debate.objects.filter(id=debate_id).first()
     if not debate:
         return 404, {"error": "Debate not found"}
-    return 200, DebateOutSchema.from_orm(debate)
-
-# POST /{debate_id}/next-turn/ は削除
+    agents = list(debate.agents.all().order_by('id'))
+    messages = list(debate.messages.order_by('turn'))
+    if agents:
+        if messages:
+            next_idx = (messages[-1].turn) % len(agents)
+        else:
+            next_idx = 0
+        next_agent = agents[next_idx]
+        next_agent_id = next_agent.id
+        next_agent_name = next_agent.name
+    else:
+        next_agent_id = None
+        next_agent_name = None
+    debate_out = DebateOutSchema.from_orm(debate)
+    debate_out.next_agent_id = next_agent_id
+    debate_out.next_agent_name = next_agent_name
+    return 200, debate_out
