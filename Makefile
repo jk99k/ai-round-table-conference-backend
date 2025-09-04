@@ -1,3 +1,6 @@
+# バックグラウンドタスクワーカー起動
+process-tasks:
+	docker-compose exec api python manage.py process_tasks
 up:
 	docker compose up -d
 

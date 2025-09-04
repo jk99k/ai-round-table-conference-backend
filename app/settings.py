@@ -41,8 +41,10 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt',
     'corsheaders',
     'ninja_jwt',
+    'background_task',
     'users',
     'agents',
+    'debates',
 ]
 
 MIDDLEWARE = [

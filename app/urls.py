@@ -19,6 +19,7 @@ from django.urls import path
 from ninja import NinjaAPI
 from users.api import router as users_router
 from agents.api import router as agents_router
+from debates.api import router as debates_router
 
 api = NinjaAPI()
 
@@ -26,6 +27,7 @@ api = NinjaAPI()
 # ユーザー関連API
 api.add_router("/users", users_router)
 api.add_router("/agents", agents_router)
+api.add_router("/debates", debates_router)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
