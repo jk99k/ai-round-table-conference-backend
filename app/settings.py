@@ -192,6 +192,16 @@ LOGGING = {
             'level': 'INFO',
             'propagate': True,
         },
+        'debates.tasks': {
+            'handlers': ['console'],
+            'level': 'INFO',
+            'propagate': False,
+        },
+        'debates.services': {
+            'handlers': ['console'],
+            'level': 'INFO',
+            'propagate': False,
+        },
     },
     'root': {
         'handlers': ['console'],

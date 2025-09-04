@@ -4,11 +4,14 @@ from agents.models import Agent
 from mako.template import Template
 from google import genai
 import os
+import logging
 
 def determine_next_turn(debate: Debate) -> ModeratorResponse:
+    logger = logging.getLogger('debates.services')
     messages = list(debate.messages.select_related('agent').order_by('turn'))
     agents = list(debate.agents.all().order_by('id'))
     if not agents:
+        logger.error(f"[DebateService] No agents assigned to debate {debate.id}")
         raise Exception('No agents assigned to debate')
     # ターン番号から次のエージェントを決定
     if messages:
@@ -25,29 +28,24 @@ def determine_next_turn(debate: Debate) -> ModeratorResponse:
         messages=messages,
         next_agent=next_agent
     )
+    logger.info(f"[DebateService] Prompt for debate_id={debate.id}:\n{prompt}")
 
-    client = genai.Client(api_key=os.getenv("GEMINI_API_KEY"))
-    response = client.models.generate_content(
-        model="gemini-2.5-flash",
-        contents=prompt,
-        config={
-            "response_mime_type": "application/json",
-            "response_schema": ModeratorResponse,
-        },
-    )
-    return response.parsed
-
-    client = genai.Client(api_key=os.getenv("GEMINI_API_KEY"))
-    response = client.models.generate_content(
-        model="gemini-2.5-flash",
-        contents=prompt,
-        config={
-            "response_mime_type": "application/json",
-            "response_schema": ModeratorResponse,
-        },
-    )
-    # response.textはJSON文字列、response.parsedはModeratorResponseインスタンス
-    result = response.parsed
-    result.agent_id = next_agent.id
-    result.agent_name = next_agent.name
-    return result
+    try:
+        client = genai.Client(api_key=os.getenv("GEMINI_API_KEY"))
+        response = client.models.generate_content(
+            model="gemini-2.5-flash",
+            contents=prompt,
+            config={
+                "response_mime_type": "application/json",
+                "response_schema": ModeratorResponse,
+            },
+        )
+        moderator_response = response.parsed
+        # Geminiの返却値にagent_id/agent_nameを補完
+        moderator_response.agent_id = next_agent.id
+        moderator_response.agent_name = next_agent.name
+        logger.info(f"[DebateService] Gemini response for debate_id={debate.id}: {response.text}")
+        return moderator_response
+    except Exception as e:
+        logger.exception(f"[DebateService] Gemini API error for debate_id={debate.id}: {e}")
+        raise

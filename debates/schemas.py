@@ -1,6 +1,8 @@
 from pydantic import BaseModel
 from ninja.orm import ModelSchema
 from typing import Optional, List, Literal
+
+from agents.schemas import AgentOutSchema
 from .models import Debate, Message
 
 class ModeratorResponse(BaseModel):
@@ -13,12 +15,13 @@ class DebateCreateSchema(BaseModel):
     agent_ids: List[int]
 
 class MessageOutSchema(ModelSchema):
+    agent: AgentOutSchema = None
     class Config:
         model = Message
-        model_fields = "__all__"
+        model_fields = ["id", "turn", "content", "created_at"]
 
 class DebateOutSchema(ModelSchema):
-    messages: List[MessageOutSchema]
+    messages: List[MessageOutSchema] = []
     class Config:
         model = Debate
         model_fields = "__all__"

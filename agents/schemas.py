@@ -8,4 +8,4 @@ class AgentCreateSchema(BaseModel):
 class AgentOutSchema(ModelSchema):
     class Config:
         model = Agent
-        model_fields = "__all__"
+        model_fields = ["name", "status", "persona_prompt", "avatar_url", "created_at", "updated_at"]
