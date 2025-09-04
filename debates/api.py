@@ -2,7 +2,7 @@ from ninja import Router
 from ninja_jwt.authentication import JWTAuth
 from django.shortcuts import get_object_or_404
 from .models import Debate, DebateStatus, Message
-from .schemas import DebateCreateSchema, DebateOutSchema, MessageOutSchema
+from .schemas import DebateCreateSchema, DebateDeleteIn, DebateOutSchema, MessageOutSchema
 from .tasks import generate_debate_turn
 from agents.models import Agent
 
@@ -82,3 +82,11 @@ def get_debate(request, debate_id: int):
     debate_out.next_agent_id = next_agent_id
     debate_out.next_agent_name = next_agent_name
     return 200, debate_out
+
+@router.delete("", response={200: dict, 400: dict})
+def delete_debates(request, data: DebateDeleteIn):
+    try:
+        deleted, _ = Debate.objects.filter(id__in=data.ids).delete()
+        return 200, {"deleted": deleted}
+    except Exception as e:
+        return 400, {"error": str(e)}

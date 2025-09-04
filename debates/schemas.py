@@ -27,3 +27,6 @@ class DebateOutSchema(ModelSchema):
     class Config:
         model = Debate
         model_fields = "__all__"
+
+class DebateDeleteIn(BaseModel):
+    ids: list[int]

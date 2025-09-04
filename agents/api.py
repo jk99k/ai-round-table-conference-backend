@@ -2,7 +2,7 @@ from ninja import Router
 from ninja_jwt.authentication import JWTAuth
 from django.shortcuts import get_object_or_404
 from .models import Agent
-from .schemas import AgentCreateSchema, AgentOutSchema
+from .schemas import AgentCreateSchema, AgentDeleteIn, AgentOutSchema
 from .tasks import run_agent_creation_task
 import threading
 
@@ -26,3 +26,11 @@ def list_agents(request):
 def get_agent(request, agent_id: int):
     agent = get_object_or_404(Agent, id=agent_id, user=request.user)
     return agent
+
+@router.delete("", response={200: dict, 400: dict})
+def delete_agents(request, data: AgentDeleteIn):
+    try:
+        deleted, _ = Agent.objects.filter(id__in=data.ids).delete()
+        return 200, {"deleted": deleted}
+    except Exception as e:
+        return 400, {"error": str(e)}

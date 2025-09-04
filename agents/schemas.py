@@ -5,7 +5,10 @@ from pydantic import BaseModel
 class AgentCreateSchema(BaseModel):
     name: str
 
+class AgentDeleteIn(BaseModel):
+    ids: list[int]
+
 class AgentOutSchema(ModelSchema):
     class Config:
         model = Agent
-        model_fields = ["name", "status", "persona_prompt", "avatar_url", "created_at", "updated_at"]
+        model_fields = ["id", "name", "status", "persona_prompt", "avatar_url", "created_at", "updated_at"]
