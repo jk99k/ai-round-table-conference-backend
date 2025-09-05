@@ -3,8 +3,10 @@ from ninja_jwt.authentication import JWTAuth
 from django.shortcuts import get_object_or_404
 from .models import Agent
 from .schemas import AgentCreateSchema, AgentDeleteIn, AgentOutSchema
+
 from .tasks import run_agent_creation_task
 import threading
+from debates.models import Debate
 
 router = Router(auth=JWTAuth(), tags=["agents"])
 
@@ -30,7 +32,11 @@ def get_agent(request, agent_id: int):
 @router.delete("", response={200: dict, 400: dict})
 def delete_agents(request, data: AgentDeleteIn):
     try:
-        deleted, _ = Agent.objects.filter(id__in=data.ids).delete()
-        return 200, {"deleted": deleted}
+        # まず該当Agentが参加しているDebateを取得
+        debates_to_delete = Debate.objects.filter(agents__id__in=data.ids).distinct()
+        debates_deleted, _ = debates_to_delete.delete()
+        # Agent自体を削除
+        agents_deleted, _ = Agent.objects.filter(id__in=data.ids).delete()
+        return 200, {"agents_deleted": agents_deleted, "debates_deleted": debates_deleted}
     except Exception as e:
         return 400, {"error": str(e)}
