@@ -9,6 +9,8 @@ class ModeratorResponse(BaseModel):
     statement: str
     reasoning: str
     conclusion_reason: Optional[Literal["NATURAL_CONCLUSION", "SUMMARY_PROVIDED", "STALEMATE"]]
+    agent_id: Optional[int] = None  # ← 追加
+    agent_name: Optional[str] = None  # ← 追加
 
 class DebateCreateSchema(BaseModel):
     topic: str
@@ -22,6 +24,7 @@ class MessageOutSchema(ModelSchema):
 
 class DebateOutSchema(ModelSchema):
     messages: List[MessageOutSchema] = []
+    agents: List[AgentOutSchema] = []
     next_agent_id: Optional[int] = None
     next_agent_name: Optional[str] = None
     class Config:
