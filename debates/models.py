@@ -23,7 +23,9 @@ class Debate(models.Model):
 
 class Message(models.Model):
 	debate = models.ForeignKey(Debate, on_delete=models.CASCADE, related_name='messages')
-	agent = models.ForeignKey('agents.Agent', on_delete=models.CASCADE)
+	agent = models.ForeignKey('agents.Agent', on_delete=models.CASCADE, null=True, blank=True)
+	agent_name = models.CharField(max_length=100, null=True, blank=True)
 	content = models.TextField()
 	turn = models.PositiveIntegerField()
 	created_at = models.DateTimeField(auto_now_add=True)
+	used = models.BooleanField(default=False)

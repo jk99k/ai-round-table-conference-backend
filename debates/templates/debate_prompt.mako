@@ -1,3 +1,9 @@
+
+% if human_instruction:
+【人間からの指示】
+${human_instruction}
+% endif
+
 議題: ${debate.topic}
 
 【参加エージェント一覧】
@@ -7,7 +13,7 @@
 
 【これまでの会話履歴】
 % for msg in messages:
-[${msg.turn}] ${msg.agent.name}: ${msg.content}
+[${msg.turn}] ${msg.agent.name if msg.agent else msg.agent_name}: ${msg.content}
 % endfor
 
 【次の発言者】

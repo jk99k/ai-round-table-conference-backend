@@ -5,6 +5,9 @@ from typing import Optional, List, Literal
 from agents.schemas import AgentOutSchema
 from .models import Debate, Message
 
+class InterruptDebateIn(BaseModel):
+    content: str
+
 class ModeratorResponse(BaseModel):
     statement: str
     reasoning: str
@@ -17,7 +20,7 @@ class DebateCreateSchema(BaseModel):
     agent_ids: List[int]
 
 class MessageOutSchema(ModelSchema):
-    agent: AgentOutSchema = None
+    agent: Optional[AgentOutSchema] = None
     class Config:
         model = Message
         model_fields = ["id", "turn", "content", "created_at"]
