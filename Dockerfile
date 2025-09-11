@@ -8,6 +8,12 @@ WORKDIR /app
 COPY requirements.txt ./
 RUN pip install --upgrade pip && pip install -r requirements.txt
 
-COPY . ./
+COPY . .
 
-CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
+COPY . .
+
+RUN chmod +x /app/entrypoint.sh
+
+ENTRYPOINT ["/app/entrypoint.sh"]
+
+CMD ["gunicorn", "--bind", "0.0.0.0:8000", "app.wsgi:application"]
