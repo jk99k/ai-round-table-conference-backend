@@ -170,8 +170,8 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # Django Ninja JWT の基本設定
 NINJA_JWT = {
     "SECRET_KEY": "your-secret-key",  # 必要に応じて環境変数等で管理
-    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=60),      # 分単位（例: 60分）
-    "REFRESH_TOKEN_LIFETIME": timedelta(days=1),   # 分単位（例: 1日）
+    "ACCESS_TOKEN_LIFETIME": timedelta(days=1),      # 分単位（例: 60分）
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=7),   # 分単位（例: 1日）
 }
 
 LOGGING = {
