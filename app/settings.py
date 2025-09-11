@@ -67,6 +67,24 @@ CORS_ALLOWED_ORIGINS = [
     "https://ai-round-table-conference-frontend.vercel.app",
 ]
 
+CORS_ALLOW_METHODS = [
+    "DELETE",
+    "GET",
+    "OPTIONS",
+    "PATCH",
+    "POST",
+    "PUT",
+]
+
+CORS_ALLOW_HEADERS = [
+    "accept",
+    "authorization",
+    "content-type",
+    "user-agent",
+    "x-csrftoken",
+    "x-requested-with",
+]
+
 ROOT_URLCONF = 'app.urls'
 
 TEMPLATES = [
